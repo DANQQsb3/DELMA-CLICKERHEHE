@@ -45,7 +45,6 @@ window.addEventListener('DOMContentLoaded', () => {
     rebirthMultiplier: 1,
     nextRebirthCost: 5000,
   };
-
   function popMessage(text) {
     el.message.textContent = text;
     setTimeout(() => el.message.textContent = "", 2000);
@@ -101,7 +100,6 @@ window.addEventListener('DOMContentLoaded', () => {
     state.costs.autoClick = Math.ceil(state.costs.autoClick * 1.35);
     render();
   }
-
   function buyBooster() {
     if (state.points < state.costs.booster)
       return popMessage("Za mało punktów!");
@@ -110,6 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
     state.booster.active = true;
     state.booster.endsAt = Date.now() + 30000;
     state.costs.booster = Math.ceil(state.costs.booster * 1.5);
+
     popMessage("Booster aktywny! Klik x2 przez 30s!");
     render();
   }
@@ -121,9 +120,9 @@ window.addEventListener('DOMContentLoaded', () => {
     state.points -= state.costs.doubleClick;
     state.perClick *= 2;
     state.costs.doubleClick = Math.ceil(state.costs.doubleClick * 2);
+
     popMessage("Double Click kupiony!");
     render();
-  }
   }
 
   function doRebirth() {
@@ -150,6 +149,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const loaded = JSON.parse(data);
     Object.assign(state, loaded);
+
     popMessage("Wczytano grę!");
     render();
   }
@@ -160,7 +160,6 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem(SAVE_KEY);
     location.reload();
   }
-
   function gameLoop() {
     const now = Date.now();
 
@@ -169,7 +168,7 @@ window.addEventListener('DOMContentLoaded', () => {
       popMessage("Booster wygasł!");
     }
 
-    state.points += state.autoRate * state.rebirthMultiplier / 10;
+    state.points += (state.autoRate * state.rebirthMultiplier) / 10;
 
     render();
   }
@@ -189,4 +188,3 @@ window.addEventListener('DOMContentLoaded', () => {
 
   render();
 });
-
