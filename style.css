@@ -130,8 +130,47 @@ body {
   color: var(--muted);
 }
 
-/* Responsywność */
-@media (max-width: 900px) {
-  .content { grid-template-columns: 1fr; }
-  #bigButton { width: 100%; }
+/* TABELA REBIRTHÓW NA DOLE PO LEWEJ */
+.rebirth-table {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 12px;
+  padding: 16px;
+  width: 260px;
+  border: 1px solid var(--accent);
+}
+
+.rebirth-table h2 {
+  margin-bottom: 12px;
+  color: var(--accent2);
+  text-align: center;
+}
+
+.rebirth-table table {
+  width: 100%;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.rebirth-table td {
+  padding: 4px 8px;
+}
+
+#rebirthBtn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+#rebirthBtn:disabled {
+  background: #555;
+  color: #aaa;
+  cursor: not-allowed;
 }
