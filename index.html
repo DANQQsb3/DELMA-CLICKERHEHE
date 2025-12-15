@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <header class="header">
     <h1>Delma Clicker</h1>
     <div class="stats">
@@ -17,13 +18,17 @@
   </header>
 
   <main class="content">
+
+    <!-- KLIKACZ -->
     <section class="click-area">
-      <button id="bigButton" aria-label="Kliknij, aby zdobyć punkty">Kliknij mnie</button>
+      <button id="bigButton">Kliknij mnie</button>
       <p class="hint">Klikaj, zbieraj punkty i kupuj ulepszenia!</p>
     </section>
 
+    <!-- SKLEP -->
     <section class="shop">
       <h2>Sklep</h2>
+
       <div class="shop-item">
         <div class="shop-info">
           <h3>Lepszy klik</h3>
@@ -61,21 +66,36 @@
       </div>
     </section>
 
-    <section class="controls">
-      <button id="saveBtn">Zapisz</button>
-      <button id="loadBtn">Wczytaj</button>
-      <button id="resetBtn" class="danger">Reset</button>
-    </section>
-
-    <section class="messages">
-      <p id="message"></p>
-    </section>
   </main>
 
+  <!-- TABELA REBIRTHÓW NA DOLE PO LEWEJ -->
+  <section class="rebirth-table">
+    <h2>Rebirth</h2>
+    <table>
+      <tr><td>Rekordy:</td><td><span id="rebirths">0</span></td></tr>
+      <tr><td>Monety:</td><td><span id="rebirthMultiplier">1x</span></td></tr>
+      <tr><td>Punkty:</td><td><span id="pointsTop">0</span></td></tr>
+      <tr><td>Punkty do rebirth:</td><td><span id="nextRebirthCost">5000</span></td></tr>
+    </table>
+    <button id="rebirthBtn">Rebirth!</button>
+  </section>
+
+  <!-- KONTROLKI -->
+  <section class="controls">
+    <button id="saveBtn">Zapisz</button>
+    <button id="loadBtn">Wczytaj</button>
+    <button id="resetBtn" class="danger">Reset</button>
+  </section>
+
+  <section class="messages">
+    <p id="message"></p>
+  </section>
+
   <footer class="footer">
-    <p>Made with ♥ dla zabawy. ALPHA 0.1</p>
+    <p>Made with ♥ dla zabawy. Wersja 1.0</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
+
