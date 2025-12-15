@@ -52,7 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function render() {
-    const clickMult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
+    const clickMult =
+      (state.booster.active ? state.booster.multiplier : 1) *
+      state.rebirthMultiplier;
 
     el.points.textContent = Math.floor(state.points);
     el.pointsTop.textContent = Math.floor(state.points);
@@ -72,13 +74,18 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleClick() {
-    const mult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
+    const mult =
+      (state.booster.active ? state.booster.multiplier : 1) *
+      state.rebirthMultiplier;
+
     state.points += state.perClick * mult;
     render();
   }
 
   function buyClickUpgrade() {
-    if (state.points < state.costs.upgradeClick) return popMessage("Za mało punktów!");
+    if (state.points < state.costs.upgradeClick)
+      return popMessage("Za mało punktów!");
+
     state.points -= state.costs.upgradeClick;
     state.perClick++;
     state.costs.upgradeClick = Math.ceil(state.costs.upgradeClick * 1.25);
@@ -86,5 +93,100 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function buyAutoClick() {
-    if (state.points < state.costs.autoClick) return popMessage("Za mało punktów!");
-    state.points -= state.costs.autoClick
+    if (state.points < state.costs.autoClick)
+      return popMessage("Za mało punktów!");
+
+    state.points -= state.costs.autoClick;
+    state.autoRate++;
+    state.costs.autoClick = Math.ceil(state.costs.autoClick * 1.35);
+    render();
+  }
+
+  function buyBooster() {
+    if (state.points < state.costs.booster)
+      return popMessage("Za mało punktów!");
+
+    state.points -= state.costs.booster;
+    state.booster.active = true;
+    state.booster.endsAt = Date.now() + 30000;
+    state.costs.booster = Math.ceil(state.costs.booster * 1.5);
+    popMessage("Booster aktywny! Klik x2 przez 30s!");
+    render();
+  }
+
+  function buyDoubleClick() {
+    if (state.points < state.costs.doubleClick)
+      return popMessage("Za mało punktów!");
+
+    state.points -= state.costs.doubleClick;
+    state.perClick *= 2;
+    state.costs.doubleClick = Math.ceil(state.costs.doubleClick * 2);
+    popMessage("Double Click kupiony!");
+    render();
+  }
+  }
+
+  function doRebirth() {
+    if (state.points < state.nextRebirthCost)
+      return popMessage("Za mało punktów!");
+
+    state.rebirths++;
+    state.rebirthMultiplier *= 2;
+    state.points = 0;
+    state.nextRebirthCost = Math.ceil(state.nextRebirthCost * 2);
+
+    popMessage("REBIRTH! Mnożnik x" + state.rebirthMultiplier);
+    render();
+  }
+
+  function saveGame() {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    popMessage("Zapisano grę!");
+  }
+
+  function loadGame() {
+    const data = localStorage.getItem(SAVE_KEY);
+    if (!data) return popMessage("Brak zapisu!");
+
+    const loaded = JSON.parse(data);
+    Object.assign(state, loaded);
+    popMessage("Wczytano grę!");
+    render();
+  }
+
+  function resetGame() {
+    if (!confirm("Na pewno reset?")) return;
+
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+  }
+
+  function gameLoop() {
+    const now = Date.now();
+
+    if (state.booster.active && now >= state.booster.endsAt) {
+      state.booster.active = false;
+      popMessage("Booster wygasł!");
+    }
+
+    state.points += state.autoRate * state.rebirthMultiplier / 10;
+
+    render();
+  }
+
+  el.bigButton.addEventListener("click", handleClick);
+  el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
+  el.autoClickBtn.addEventListener("click", buyAutoClick);
+  el.boosterBtn.addEventListener("click", buyBooster);
+  el.doubleClickBtn.addEventListener("click", buyDoubleClick);
+  el.rebirthBtn.addEventListener("click", doRebirth);
+
+  el.saveBtn.addEventListener("click", saveGame);
+  el.loadBtn.addEventListener("click", loadGame);
+  el.resetBtn.addEventListener("click", resetGame);
+
+  setInterval(gameLoop, 100);
+
+  render();
+});
+
