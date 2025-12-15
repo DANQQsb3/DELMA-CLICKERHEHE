@@ -1,178 +1,90 @@
-:root {
-  --bg1: #0f2027;
-  --bg2: #203a43;
-  --bg3: #2c5364;
-  --card: rgba(255,255,255,0.08);
-  --accent: #00e0ff;
-  --accent2: #ff9f1c;
-  --text: #f1f1f1;
-  --muted: #b0b0b0;
-}
+window.addEventListener('DOMContentLoaded', () => {
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-  background-size: 400% 400%;
-  animation: gradientMove 15s ease infinite;
-  color: var(--text);
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
+  const el = {
+    points: document.getElementById('points'),
+    pointsTop: document.getElementById('pointsTop'),
+    perClick: document.getElementById('perClick'),
+    autoRate: document.getElementById('autoRate'),
+    bigButton: document.getElementById('bigButton'),
+    message: document.getElementById('message'),
+    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
+    autoClickBtn: document.getElementById('autoClickBtn'),
+    boosterBtn: document.getElementById('boosterBtn'),
+    doubleClickBtn: document.getElementById('doubleClickBtn'),
+    upgradeClickCost: document.getElementById('upgradeClickCost'),
+    autoClickCost: document.getElementById('autoClickCost'),
+    boosterCost: document.getElementById('boosterCost'),
+    doubleClickCost: document.getElementById('doubleClickCost'),
+    saveBtn: document.getElementById('saveBtn'),
+    loadBtn: document.getElementById('loadBtn'),
+    resetBtn: document.getElementById('resetBtn'),
+    rebirths: document.getElementById('rebirths'),
+    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
+    nextRebirthCost: document.getElementById('nextRebirthCost'),
+    rebirthBtn: document.getElementById('rebirthBtn'),
+  };
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+  const SAVE_KEY = "delma-clicker-v3";
 
-.header {
-  padding: 20px;
-  text-align: center;
-  background: rgba(0,0,0,0.4);
-  border-bottom: 2px solid var(--accent);
-}
+  const state = {
+    points: 0,
+    perClick: 1,
+    autoRate: 0,
+    costs: {
+      upgradeClick: 10,
+      autoClick: 25,
+      booster: 100,
+      doubleClick: 500,
+    },
+    booster: {
+      active: false,
+      multiplier: 2,
+      endsAt: 0,
+    },
+    rebirths: 0,
+    rebirthMultiplier: 1,
+    nextRebirthCost: 5000,
+  };
 
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 10px;
-}
+  function popMessage(text) {
+    el.message.textContent = text;
+    setTimeout(() => el.message.textContent = "", 2000);
+  }
 
-.content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  padding: 24px;
-}
+  function render() {
+    const clickMult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
 
-.click-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
+    el.points.textContent = Math.floor(state.points);
+    el.pointsTop.textContent = Math.floor(state.points);
+    el.perClick.textContent = state.perClick * clickMult;
+    el.autoRate.textContent = state.autoRate * state.rebirthMultiplier;
 
-#bigButton {
-  font-size: 28px;
-  padding: 20px 40px;
-  border-radius: 20px;
-  border: none;
-  background: var(--accent);
-  color: #000;
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-}
-#bigButton:hover { transform: scale(1.05); }
-#bigButton:active { transform: scale(0.95); }
+    el.upgradeClickCost.textContent = state.costs.upgradeClick;
+    el.autoClickCost.textContent = state.costs.autoClick;
+    el.boosterCost.textContent = state.costs.booster;
+    el.doubleClickCost.textContent = state.costs.doubleClick;
 
-.shop {
-  background: rgba(0,0,0,0.3);
-  border-radius: 16px;
-  padding: 20px;
-}
+    el.rebirths.textContent = state.rebirths;
+    el.rebirthMultiplier.textContent = state.rebirthMultiplier + "x";
+    el.nextRebirthCost.textContent = state.nextRebirthCost;
 
-.shop h2 {
-  text-align: center;
-  margin-bottom: 16px;
-  color: var(--accent2);
-}
+    el.rebirthBtn.disabled = state.points < state.nextRebirthCost;
+  }
 
-.shop-item {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.shop-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-}
+  function handleClick() {
+    const mult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
+    state.points += state.perClick * mult;
+    render();
+  }
 
-.shop-info h3 { margin: 0; color: var(--accent); }
-.shop-info p { margin: 2px 0; color: var(--muted); }
+  function buyClickUpgrade() {
+    if (state.points < state.costs.upgradeClick) return popMessage("Za mało punktów!");
+    state.points -= state.costs.upgradeClick;
+    state.perClick++;
+    state.costs.upgradeClick = Math.ceil(state.costs.upgradeClick * 1.25);
+    render();
+  }
 
-.shop button {
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: none;
-  background: var(--accent2);
-  color: #000;
-  cursor: pointer;
-  font-weight: bold;
-}
-.shop button:hover { background: #ffb347; }
-.shop button:active { transform: scale(0.95); }
-
-.controls {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 40px;
-}
-
-.controls .danger {
-  background: #ff4d4d;
-  color: #fff;
-}
-
-.footer {
-  text-align: center;
-  padding: 12px;
-  background: rgba(0,0,0,0.4);
-  color: var(--muted);
-}
-
-/* TABELA REBIRTHÓW NA DOLE PO LEWEJ */
-.rebirth-table {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 12px;
-  padding: 16px;
-  width: 260px;
-  border: 1px solid var(--accent);
-}
-
-.rebirth-table h2 {
-  margin-bottom: 12px;
-  color: var(--accent2);
-  text-align: center;
-}
-
-.rebirth-table table {
-  width: 100%;
-  margin-bottom: 12px;
-  color: var(--text);
-}
-
-.rebirth-table td {
-  padding: 4px 8px;
-}
-
-#rebirthBtn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent);
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-}
-
-#rebirthBtn:disabled {
-  background: #555;
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-
+  function buyAutoClick() {
+    if (state.points < state.costs.autoClick) return popMessage("Za mało punktów!");
+    state.points -= state.costs.autoClick
