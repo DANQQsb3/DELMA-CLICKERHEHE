@@ -95,7 +95,30 @@
     <p>Made with ♥ dla zabawy. Wersja 1.0</p>
   </footer>
 
-  <script src="script.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const el = {
+    points: document.getElementById('points'),
+    bigButton: document.getElementById('bigButton'),
+  };
+
+  let points = 0;
+
+  function render() {
+    el.points.textContent = points;
+  }
+
+  function handleClick() {
+    points++;
+    render();
+  }
+
+  el.bigButton.addEventListener("click", handleClick);
+  render();
+});
+</script>
+
 </body>
 </html>
+
 
