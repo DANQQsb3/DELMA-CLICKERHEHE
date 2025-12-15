@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delma Clicker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Delma Clicker</h1>
+    <div class="stats">
+      <div><span class="label">Punkty:</span> <span id="points">0</span></div>
+      <div><span class="label">Klik za:</span> <span id="perClick">1</span></div>
+      <div><span class="label">Auto/s:</span> <span id="autoRate">0</span></div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="click-area">
+      <button id="bigButton" aria-label="Kliknij, aby zdobyć punkty">Kliknij mnie</button>
+      <p class="hint">Klikaj, zbieraj punkty i kupuj ulepszenia!</p>
+    </section>
+
+    <section class="shop">
+      <h2>Sklep</h2>
+      <div class="shop-item">
+        <div class="shop-info">
+          <h3>Lepszy klik</h3>
+          <p>+1 do punktów za klik</p>
+          <p>Koszt: <span id="upgradeClickCost">10</span></p>
+        </div>
+        <button id="upgradeClickBtn">Kup</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-info">
+          <h3>Auto-kliker</h3>
+          <p>Dodaje 1 punkt na sekundę</p>
+          <p>Koszt: <span id="autoClickCost">25</span></p>
+        </div>
+        <button id="autoClickBtn">Kup</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-info">
+          <h3>Booster x2 (30s)</h3>
+          <p>Podwaja punkty z klików przez 30 sekund</p>
+          <p>Koszt: <span id="boosterCost">100</span></p>
+        </div>
+        <button id="boosterBtn">Kup</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-info">
+          <h3>Double Click</h3>
+          <p>Podwaja punkty za klik</p>
+          <p>Koszt: <span id="doubleClickCost">500</span></p>
+        </div>
+        <button id="doubleClickBtn">Kup</button>
+      </div>
+    </section>
+
+    <section class="controls">
+      <button id="saveBtn">Zapisz</button>
+      <button id="loadBtn">Wczytaj</button>
+      <button id="resetBtn" class="danger">Reset</button>
+    </section>
+
+    <section class="messages">
+      <p id="message"></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Made with ♥ dla zabawy. ALPHA 0.1</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
