@@ -1,179 +1,83 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <title>Delma Clicker — Full Edition</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom, #1e1e1e, #2a2a2a);
+  color: #f0f0f0;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
 
-  <h1>Delma Clicker</h1>
+h1 {
+  margin-top: 30px;
+  font-size: 36px;
+  color: #ffdd57;
+  text-shadow: 1px 1px 2px #000;
+}
 
-  <h2>Punkty: <span id="points">0</span></h2>
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
 
-  <button id="bigButton">Klikaj mnie!</button>
+#points {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffcc;
+}
 
-  <!-- SKLEP -->
-  <section class="shop">
-    <h2>Sklep</h2>
+#bigButton {
+  background: #4caf50;
+  color: white;
+  font-size: 28px;
+  padding: 20px 50px;
+  margin: 20px auto;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.1s ease;
+}
 
-    <p>Siła kliknięcia: <span id="perClick">1</span></p>
-    <button id="upgradeClickBtn">Ulepsz klik (+1)</button>
-    <p>Koszt: <span id="upgradeClickCost">10</span></p>
+#bigButton:active {
+  transform: scale(0.95);
+}
 
-    <hr>
+section.shop, section.rebirth {
+  background: #333;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
 
-    <p>Auto klików na sekundę: <span id="autoRate">0</span></p>
-    <button id="autoClickBtn">Kup auto klik (+1/s)</button>
-    <p>Koszt: <span id="autoClickCost">25</span></p>
+button {
+  background: #555;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 8px 0;
+  transition: background 0.2s ease;
+}
 
-    <hr>
+button:hover {
+  background: #777;
+}
 
-    <p>Booster x2 na 10 sekund</p>
-    <button id="boosterBtn">Kup booster</button>
-    <p>Koszt: <span id="boosterCost">200</span></p>
-  </section>
+p {
+  margin: 8px 0;
+}
 
-  <!-- REBIRTH -->
-  <section class="rebirth">
-    <h2>Rebirth</h2>
-    <p>Rebirthy: <span id="rebirths">0</span></p>
-    <p>Mnożnik punktów: <span id="rebirthMultiplier">1</span>x</p>
-    <p>Koszt rebirth: <span id="rebirthCost">5000</span></p>
-    <button id="rebirthBtn">Zrób rebirth</button>
-  </section>
+hr {
+  border: none;
+  border-top: 1px solid #666;
+  margin: 15px 0;
+}
 
-  <footer class="footer">
-    <p>Made with ♥ dla zabawy. FULL EDITION</p>
-  </footer>
-
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-
-  const el = {
-    points: document.getElementById('points'),
-    bigButton: document.getElementById('bigButton'),
-
-    perClick: document.getElementById('perClick'),
-    autoRate: document.getElementById('autoRate'),
-
-    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
-    autoClickBtn: document.getElementById('autoClickBtn'),
-    boosterBtn: document.getElementById('boosterBtn'),
-
-    upgradeClickCost: document.getElementById('upgradeClickCost'),
-    autoClickCost: document.getElementById('autoClickCost'),
-    boosterCost: document.getElementById('boosterCost'),
-
-    rebirthBtn: document.getElementById('rebirthBtn'),
-    rebirths: document.getElementById('rebirths'),
-    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    rebirthCost: document.getElementById('rebirthCost'),
-  };
-
-  // STAN GRY
-  let points = 0;
-  let perClick = 1;
-  let autoRate = 0;
-
-  let upgradeClickCost = 10;
-  let autoClickCost = 25;
-  let boosterCost = 200;
-
-  let boosterActive = false;
-  let boosterTime = 0;
-
-  let rebirths = 0;
-  let rebirthMultiplier = 1;
-  let rebirthCost = 5000;
-
-  function render() {
-    el.points.textContent = Math.floor(points);
-    el.perClick.textContent = perClick;
-    el.autoRate.textContent = autoRate;
-
-    el.upgradeClickCost.textContent = upgradeClickCost;
-    el.autoClickCost.textContent = autoClickCost;
-    el.boosterCost.textContent = boosterCost;
-
-    el.rebirths.textContent = rebirths;
-    el.rebirthMultiplier.textContent = rebirthMultiplier;
-    el.rebirthCost.textContent = rebirthCost;
-  }
-
-  function handleClick() {
-    let gain = perClick * rebirthMultiplier;
-    if (boosterActive) gain *= 2;
-    points += gain;
-    render();
-  }
-
-  function buyClickUpgrade() {
-    if (points < upgradeClickCost) return;
-    points -= upgradeClickCost;
-    perClick += 1;
-    upgradeClickCost = Math.ceil(upgradeClickCost * 1.4);
-    render();
-  }
-
-  function buyAutoClick() {
-    if (points < autoClickCost) return;
-    points -= autoClickCost;
-    autoRate += 1;
-    autoClickCost = Math.ceil(autoClickCost * 1.5);
-    render();
-  }
-
-  function buyBooster() {
-    if (points < boosterCost) return;
-    points -= boosterCost;
-    boosterActive = true;
-    boosterTime = 100; // 10 sekund (100 × 100ms)
-    boosterCost = Math.ceil(boosterCost * 1.8);
-    render();
-  }
-
-  function doRebirth() {
-    if (points < rebirthCost) return;
-
-    points = 0;
-    perClick = 1;
-    autoRate = 0;
-
-    upgradeClickCost = 10;
-    autoClickCost = 25;
-    boosterCost = 200;
-
-    rebirths += 1;
-    rebirthMultiplier = 1 + rebirths;
-    rebirthCost = Math.ceil(rebirthCost * 2.5);
-
-    render();
-  }
-
-  // AUTO KLIK + BOOSTER TIMER
-  setInterval(() => {
-    points += (autoRate * rebirthMultiplier) / 10;
-    if (boosterActive) points += (autoRate * rebirthMultiplier) / 10;
-
-    if (boosterActive) {
-      boosterTime--;
-      if (boosterTime <= 0) boosterActive = false;
-    }
-
-    render();
-  }, 100);
-
-  // LISTENERY
-  el.bigButton.addEventListener("click", handleClick);
-  el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
-  el.autoClickBtn.addEventListener("click", buyAutoClick);
-  el.boosterBtn.addEventListener("click", buyBooster);
-  el.rebirthBtn.addEventListener("click", doRebirth);
-
-  render();
-});
-</script>
-
-</body>
-</html>
+.footer {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #aaa;
+}
