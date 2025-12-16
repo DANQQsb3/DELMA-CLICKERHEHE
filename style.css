@@ -1,3 +1,4 @@
+/* OGÓLNE */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #111;
@@ -6,11 +7,13 @@ body {
   padding: 0;
 }
 
+/* GÓRA */
 #top-area {
   text-align: center;
   padding: 20px;
 }
 
+/* PRZYCISK GŁÓWNY */
 #bigButton {
   background: #00ff88;
   color: #000;
@@ -26,6 +29,7 @@ body {
   transform: scale(0.95);
 }
 
+/* PANEL SKLEPU */
 #shop-area {
   position: fixed;
   right: 10px;
@@ -36,6 +40,7 @@ body {
   border-radius: 12px;
 }
 
+/* PANEL REBIRTH */
 #rebirth-area {
   position: fixed;
   right: 10px;
@@ -46,6 +51,7 @@ body {
   border-radius: 12px;
 }
 
+/* PANEL ZAPISU */
 #save-area {
   position: fixed;
   left: 10px;
@@ -56,6 +62,7 @@ body {
   border-radius: 12px;
 }
 
+/* PRZYCISKI */
 button {
   width: 100%;
   padding: 10px;
@@ -71,3 +78,23 @@ button {
 button:hover {
   background: #00cc66;
 }
+
+/* STOPKA */
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+  color: #888;
+}
+
+/* TELEFONY */
+@media (max-width: 800px) {
+  #shop-area,
+  #rebirth-area,
+  #save-area {
+    position: static;
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  #bigButton {
