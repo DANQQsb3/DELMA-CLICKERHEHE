@@ -2,19 +2,17 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Delma Clicker — Full Edition</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <title>Delma Clicker — Save System Edition</title>
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
-  <!-- GÓRNY PRZYCISK -->
   <div id="top-area">
     <h1>Delma Clicker</h1>
     <h2>Punkty: <span id="points">0</span></h2>
     <button id="bigButton">Klikaj mnie!</button>
   </div>
 
-  <!-- SKLEP PO PRAWEJ -->
   <section id="shop-area">
     <h2>Sklep</h2>
 
@@ -35,7 +33,6 @@
     <p>Koszt: <span id="boosterCost">200</span></p>
   </section>
 
-  <!-- REBIRTH W ROGU -->
   <section id="rebirth-area">
     <h2>Rebirth</h2>
     <p>Rebirthy: <span id="rebirths">0</span></p>
@@ -44,50 +41,25 @@
     <button id="rebirthBtn">Zrób rebirth</button>
   </section>
 
-  <!-- LICZNIK ODWIEDZIN -->
-  <div id="visitorCounter">Odwiedzin: ładowanie...</div>
+  <section id="save-area">
+    <h2>Zapis gry</h2>
+    <button id="saveBtn">Zapisz</button>
+    <button id="loadBtn">Wczytaj</button>
+    <button id="softResetBtn">Reset (bez kasowania zapisu)</button>
+  </section>
 
   <footer class="footer">
-    <p>Made with ♥ dla zabawy. FULL EDITION</p>
+    <p>Made with ♥ dla zabawy. SAVE EDITION</p>
   </footer>
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
 
-  // ============================
-  // LICZNIK ODWIEDZIN
-  // ============================
-  fetch('https://api.countapi.xyz/hit/danqqsb3-delma/visits')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCounter').textContent =
-        'Odwiedzin: ' + data.value;
-    });
+  const SAVE_KEY = "delmaSave";
 
   // ============================
-  // GRA CLICKER
+  // ZMIENNE GRY
   // ============================
-
-  const el = {
-    points: document.getElementById('points'),
-    bigButton: document.getElementById('bigButton'),
-
-    perClick: document.getElementById('perClick'),
-    autoRate: document.getElementById('autoRate'),
-
-    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
-    autoClickBtn: document.getElementById('autoClickBtn'),
-    boosterBtn: document.getElementById('boosterBtn'),
-
-    upgradeClickCost: document.getElementById('upgradeClickCost'),
-    autoClickCost: document.getElementById('autoClickCost'),
-    boosterCost: document.getElementById('boosterCost'),
-
-    rebirthBtn: document.getElementById('rebirthBtn'),
-    rebirths: document.getElementById('rebirths'),
-    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    rebirthCost: document.getElementById('rebirthCost'),
-  };
 
   let points = 0;
   let perClick = 1;
@@ -104,91 +76,47 @@ window.addEventListener('DOMContentLoaded', () => {
   let rebirthMultiplier = 1;
   let rebirthCost = 5000;
 
-  function render() {
-    el.points.textContent = Math.floor(points);
-    el.perClick.textContent = perClick;
-    el.autoRate.textContent = autoRate;
+  const el = {
+    points: document.getElementById('points'),
+    perClick: document.getElementById('perClick'),
+    autoRate: document.getElementById('autoRate'),
+    upgradeClickCost: document.getElementById('upgradeClickCost'),
+    autoClickCost: document.getElementById('autoClickCost'),
+    boosterCost: document.getElementById('boosterCost'),
+    rebirths: document.getElementById('rebirths'),
+    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
+    rebirthCost: document.getElementById('rebirthCost'),
+  };
 
-    el.upgradeClickCost.textContent = upgradeClickCost;
-    el.autoClickCost.textContent = autoClickCost;
-    el.boosterCost.textContent = boosterCost;
+  // ============================
+  // ZAPIS GRY
+  // ============================
 
-    el.rebirths.textContent = rebirths;
-    el.rebirthMultiplier.textContent = rebirthMultiplier;
-    el.rebirthCost.textContent = rebirthCost;
+  function saveGame() {
+    const data = {
+      points,
+      perClick,
+      autoRate,
+      upgradeClickCost,
+      autoClickCost,
+      boosterCost,
+      boosterActive,
+      boosterTime,
+      rebirths,
+      rebirthMultiplier,
+      rebirthCost
+    };
+
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    console.log("Gra zapisana!");
   }
 
-  function handleClick() {
-    let gain = perClick * rebirthMultiplier;
-    if (boosterActive) gain *= 2;
-    points += gain;
-    render();
-  }
+  function loadGame() {
+    const data = localStorage.getItem(SAVE_KEY);
+    if (!data) return console.log("Brak zapisu!");
 
-  function buyClickUpgrade() {
-    if (points < upgradeClickCost) return;
-    points -= upgradeClickCost;
-    perClick += 1;
-    upgradeClickCost = Math.ceil(upgradeClickCost * 1.4);
-    render();
-  }
+    const loaded = JSON.parse(data);
 
-  function buyAutoClick() {
-    if (points < autoClickCost) return;
-    points -= autoClickCost;
-    autoRate += 1;
-    autoClickCost = Math.ceil(autoClickCost * 1.5);
-    render();
-  }
-
-  function buyBooster() {
-    if (points < boosterCost) return;
-    points -= boosterCost;
-    boosterActive = true;
-    boosterTime = 100;
-    boosterCost = Math.ceil(boosterCost * 1.8);
-    render();
-  }
-
-  function doRebirth() {
-    if (points < rebirthCost) return;
-
-    points = 0;
-    perClick = 1;
-    autoRate = 0;
-
-    upgradeClickCost = 10;
-    autoClickCost = 25;
-    boosterCost = 200;
-
-    rebirths += 1;
-    rebirthMultiplier = 1 + rebirths;
-    rebirthCost = Math.ceil(rebirthCost * 2.5);
-
-    render();
-  }
-
-  setInterval(() => {
-    points += (autoRate * rebirthMultiplier) / 10;
-    if (boosterActive) points += (autoRate * rebirthMultiplier) / 10;
-
-    if (boosterActive) {
-      boosterTime--;
-      if (boosterTime <= 0) boosterActive = false;
-    }
-
-    render();
-  }, 100);
-
-  el.bigButton.addEventListener("click", handleClick);
-  el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
-  el.autoClickBtn.addEventListener("click", buyAutoClick);
-  el.boosterBtn.addEventListener("click", buyBooster);
-  el.rebirthBtn.addEventListener("click", doRebirth);
-
-  render();
-});
-</script>
-
-</body>
-</html>
+    points = loaded.points;
+    perClick = loaded.perClick;
+    autoRate = loaded.auto
