@@ -6,13 +6,11 @@ body {
   padding: 0;
 }
 
-/* GÓRA */
 #top-area {
   text-align: center;
   padding: 20px;
 }
 
-/* PRZYCISK */
 #bigButton {
   background: #00ff88;
   color: #000;
@@ -28,7 +26,6 @@ body {
   transform: scale(0.95);
 }
 
-/* SKLEP PO PRAWEJ */
 #shop-area {
   position: fixed;
   right: 10px;
@@ -39,7 +36,6 @@ body {
   border-radius: 12px;
 }
 
-/* REBIRTH W ROGU */
 #rebirth-area {
   position: fixed;
   right: 10px;
@@ -50,26 +46,28 @@ body {
   border-radius: 12px;
 }
 
-/* LICZNIK ODWIEDZIN */
-#visitorCounter {
+#save-area {
   position: fixed;
   left: 10px;
   bottom: 10px;
-  font-size: 18px;
-  color: #aaa;
+  width: 300px;
+  background: #222;
+  padding: 20px;
+  border-radius: 12px;
 }
 
-/* TELEFONY */
-@media (max-width: 800px) {
-  #shop-area, #rebirth-area {
-    position: static;
-    width: 90%;
-    margin: 20px auto;
-  }
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 8px;
+  background: #00ff88;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  #visitorCounter {
-    position: static;
-    text-align: center;
-    margin-top: 20px;
-  }
+button:hover {
+  background: #00cc66;
 }
