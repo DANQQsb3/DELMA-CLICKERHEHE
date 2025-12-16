@@ -90,10 +90,22 @@
   <section class="messages">
     <p id="message"></p>
   </section>
+<section class="shop">
+  <h2>Sklep</h2>
+  <p>Siła kliknięcia: <span id="perClick">1</span></p>
+  <p>Auto klików na sekundę: <span id="autoRate">0</span></p>
 
-  <footer class="footer">
-    <p>Made with ♥ dla zabawy. ALPHA 0,3 </p>
-  </footer>
+  <button id="upgradeClickBtn">Ulepsz klik (+1)</button>
+  <span>Koszt: <span id="upgradeClickCost">10</span></span><br><br>
+
+  <button id="autoClickBtn">Auto klik (+1/s)</button>
+  <span>Koszt: <span id="autoClickCost">25</span></span>
+</section>
+
+<footer class="footer">
+  <p>Made with ♥ dla zabawy. ALPHA 0,3 </p>
+</footer>
+
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
@@ -120,6 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
