@@ -1,87 +1,63 @@
+/* ===== GLOBAL ===== */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #1a1a1a, #0f0f0f);
-  color: #f0f0f0;
-  text-align: center;
+  background: #111;
+  color: #fff;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
-h1 {
-  margin-top: 30px;
-  font-size: 40px;
-  color: #00ffc6;
-  text-shadow: 0 0 10px #00ffc6;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #ffdd57;
-}
-
-#points {
-  font-size: 32px;
-  font-weight: bold;
-  color: #00ffcc;
-  margin-bottom: 20px;
+/* ===== GÓRNY PRZYCISK ===== */
+#top-area {
+  text-align: center;
+  padding: 20px;
 }
 
 #bigButton {
-  background: linear-gradient(to bottom, #00ff88, #00cc66);
+  background: #00ff88;
   color: #000;
-  font-size: 30px;
+  font-size: 32px;
   padding: 25px 60px;
-  margin: 20px auto;
   border: none;
   border-radius: 16px;
   box-shadow: 0 0 20px #00ff88;
-  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  transition: 0.1s;
 }
 
 #bigButton:active {
   transform: scale(0.95);
-  box-shadow: 0 0 10px #00ff88;
 }
 
-section.shop, section.rebirth {
+/* ===== PANEL SKLEPU PO PRAWEJ ===== */
+#shop-area {
+  position: fixed;
+  right: 10px;
+  top: 120px;
+  width: 300px;
   background: #222;
-  border-radius: 16px;
-  padding: 25px;
-  margin: 30px auto;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 0 15px rgba(0,255,200,0.2);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,255,200,0.2);
 }
 
-button {
-  background: #444;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 24px;
-  font-size: 16px;
-  margin: 10px 0;
-  transition: background 0.2s ease;
+/* ===== PANEL REBIRTH W ROGU ===== */
+#rebirth-area {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 300px;
+  background: #2a2a2a;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255,200,0,0.2);
 }
 
-button:hover {
-  background: #666;
-}
-
-p {
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #555;
-  margin: 20px 0;
-}
-
-.footer {
-  margin-top: 40px;
-  font-size: 14px;
-  color: #888;
+/* ===== RESPONSYWNOŚĆ NA TELEFONY ===== */
+@media (max-width: 800px) {
+  #shop-area, #rebirth-area {
+    position: static;
+    width: 90%;
+    margin: 20px auto;
+  }
 }
