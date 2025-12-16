@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Delma Clicker — Full Edition</title>
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
     <p>Koszt: <span id="boosterCost">200</span></p>
   </section>
 
-  <!-- REBIRTH W PRAWYM ROGU -->
+  <!-- REBIRTH W ROGU -->
   <section id="rebirth-area">
     <h2>Rebirth</h2>
     <p>Rebirthy: <span id="rebirths">0</span></p>
@@ -44,12 +44,29 @@
     <button id="rebirthBtn">Zrób rebirth</button>
   </section>
 
+  <!-- LICZNIK ODWIEDZIN -->
+  <div id="visitorCounter">Odwiedzin: ładowanie...</div>
+
   <footer class="footer">
     <p>Made with ♥ dla zabawy. FULL EDITION</p>
   </footer>
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
+
+  // ============================
+  // LICZNIK ODWIEDZIN
+  // ============================
+  fetch('https://api.countapi.xyz/hit/danqqsb3-delma/visits')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('visitorCounter').textContent =
+        'Odwiedzin: ' + data.value;
+    });
+
+  // ============================
+  // GRA CLICKER
+  // ============================
 
   const el = {
     points: document.getElementById('points'),
