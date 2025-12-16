@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Delma Clicker — Full Edition</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
-  <h1>Delma Clicker</h1>
+  <!-- GÓRNY PRZYCISK -->
+  <div id="top-area">
+    <h1>Delma Clicker</h1>
+    <h2>Punkty: <span id="points">0</span></h2>
+    <button id="bigButton">Klikaj mnie!</button>
+  </div>
 
-  <h2>Punkty: <span id="points">0</span></h2>
-
-  <button id="bigButton">Klikaj mnie!</button>
-
-  <!-- SKLEP -->
-  <section class="shop">
+  <!-- SKLEP PO PRAWEJ -->
+  <section id="shop-area">
     <h2>Sklep</h2>
 
     <p>Siła kliknięcia: <span id="perClick">1</span></p>
@@ -34,8 +35,8 @@
     <p>Koszt: <span id="boosterCost">200</span></p>
   </section>
 
-  <!-- REBIRTH -->
-  <section class="rebirth">
+  <!-- REBIRTH W PRAWYM ROGU -->
+  <section id="rebirth-area">
     <h2>Rebirth</h2>
     <p>Rebirthy: <span id="rebirths">0</span></p>
     <p>Mnożnik punktów: <span id="rebirthMultiplier">1</span>x</p>
@@ -71,7 +72,6 @@ window.addEventListener('DOMContentLoaded', () => {
     rebirthCost: document.getElementById('rebirthCost'),
   };
 
-  // STAN GRY
   let points = 0;
   let perClick = 1;
   let autoRate = 0;
@@ -128,7 +128,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (points < boosterCost) return;
     points -= boosterCost;
     boosterActive = true;
-    boosterTime = 100; // 10 sekund (100 × 100ms)
+    boosterTime = 100;
     boosterCost = Math.ceil(boosterCost * 1.8);
     render();
   }
@@ -151,7 +151,6 @@ window.addEventListener('DOMContentLoaded', () => {
     render();
   }
 
-  // AUTO KLIK + BOOSTER TIMER
   setInterval(() => {
     points += (autoRate * rebirthMultiplier) / 10;
     if (boosterActive) points += (autoRate * rebirthMultiplier) / 10;
@@ -164,7 +163,6 @@ window.addEventListener('DOMContentLoaded', () => {
     render();
   }, 100);
 
-  // LISTENERY
   el.bigButton.addEventListener("click", handleClick);
   el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
   el.autoClickBtn.addEventListener("click", buyAutoClick);
