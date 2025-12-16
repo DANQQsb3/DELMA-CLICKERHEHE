@@ -1,19 +1,18 @@
-/* ===== GLOBAL ===== */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #111;
   color: #fff;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
 
-/* ===== GÓRNY PRZYCISK ===== */
+/* GÓRA */
 #top-area {
   text-align: center;
   padding: 20px;
 }
 
+/* PRZYCISK */
 #bigButton {
   background: #00ff88;
   color: #000;
@@ -29,19 +28,18 @@ body {
   transform: scale(0.95);
 }
 
-/* ===== PANEL SKLEPU PO PRAWEJ ===== */
+/* SKLEP PO PRAWEJ */
 #shop-area {
   position: fixed;
   right: 10px;
-  top: 120px;
+  top: 140px;
   width: 300px;
   background: #222;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,255,200,0.2);
 }
 
-/* ===== PANEL REBIRTH W ROGU ===== */
+/* REBIRTH W ROGU */
 #rebirth-area {
   position: fixed;
   right: 10px;
@@ -50,14 +48,28 @@ body {
   background: #2a2a2a;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(255,200,0,0.2);
 }
 
-/* ===== RESPONSYWNOŚĆ NA TELEFONY ===== */
+/* LICZNIK ODWIEDZIN */
+#visitorCounter {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  font-size: 18px;
+  color: #aaa;
+}
+
+/* TELEFONY */
 @media (max-width: 800px) {
   #shop-area, #rebirth-area {
     position: static;
     width: 90%;
     margin: 20px auto;
+  }
+
+  #visitorCounter {
+    position: static;
+    text-align: center;
+    margin-top: 20px;
   }
 }
