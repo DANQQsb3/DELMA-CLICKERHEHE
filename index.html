@@ -1,138 +1,103 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Delma Clicker</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial; background: #222; color: #fff; text-align: center; }
+    button { padding: 10px 20px; margin: 10px; font-size: 18px; }
+    .shop { margin-top: 30px; padding: 20px; background: #333; border-radius: 10px; }
+  </style>
 </head>
 <body>
 
-  <header class="header">
-    <h1>Delma Clicker</h1>
-    <div class="stats">
-      <div><span class="label">Punkty:</span> <span id="points">0</span></div>
-      <div><span class="label">Klik za:</span> <span id="perClick">1</span></div>
-      <div><span class="label">Auto/s:</span> <span id="autoRate">0</span></div>
-    </div>
-  </header>
+  <h1>Delma Clicker</h1>
 
-  <main class="content">
+  <h2>Punkty: <span id="points">0</span></h2>
 
-    <!-- KLIKACZ -->
-    <section class="click-area">
-      <button id="bigButton">Kliknij mnie</button>
-      <p class="hint">Klikaj, zbieraj punkty i kupuj ulepszenia!</p>
-    </section>
+  <button id="bigButton">Klikaj mnie!</button>
 
-    <!-- SKLEP -->
-    <section class="shop">
-      <h2>Sklep</h2>
+  <section class="shop">
+    <h2>Sklep</h2>
 
-      <div class="shop-item">
-        <div class="shop-info">
-          <h3>Lepszy klik</h3>
-          <p>+1 do punktów za klik</p>
-          <p>Koszt: <span id="upgradeClickCost">10</span></p>
-        </div>
-        <button id="upgradeClickBtn">Kup</button>
-      </div>
+    <p>Siła kliknięcia: <span id="perClick">1</span></p>
+    <button id="upgradeClickBtn">Ulepsz klik (+1)</button>
+    <p>Koszt: <span id="upgradeClickCost">10</span></p>
 
-      <div class="shop-item">
-        <div class="shop-info">
-          <h3>Auto-kliker</h3>
-          <p>Dodaje 1 punkt na sekundę</p>
-          <p>Koszt: <span id="autoClickCost">25</span></p>
-        </div>
-        <button id="autoClickBtn">Kup</button>
-      </div>
+    <br><br>
 
-      <div class="shop-item">
-        <div class="shop-info">
-          <h3>Booster x2 (30s)</h3>
-          <p>Podwaja punkty z klików przez 30 sekund</p>
-          <p>Koszt: <span id="boosterCost">100</span></p>
-        </div>
-        <button id="boosterBtn">Kup</button>
-      </div>
-
-      <div class="shop-item">
-        <div class="shop-info">
-          <h3>Double Click</h3>
-          <p>Podwaja punkty za klik</p>
-          <p>Koszt: <span id="doubleClickCost">500</span></p>
-        </div>
-        <button id="doubleClickBtn">Kup</button>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- TABELA REBIRTHÓW NA DOLE PO LEWEJ -->
-  <section class="rebirth-table">
-    <h2>Rebirth</h2>
-    <table>
-      <tr><td>Rekordy:</td><td><span id="rebirths">0</span></td></tr>
-      <tr><td>Monety:</td><td><span id="rebirthMultiplier">1x</span></td></tr>
-      <tr><td>Punkty:</td><td><span id="pointsTop">0</span></td></tr>
-      <tr><td>Punkty do rebirth:</td><td><span id="nextRebirthCost">5000</span></td></tr>
-    </table>
-    <button id="rebirthBtn">Rebirth!</button>
+    <p>Auto klików na sekundę: <span id="autoRate">0</span></p>
+    <button id="autoClickBtn">Kup auto klik (+1/s)</button>
+    <p>Koszt: <span id="autoClickCost">25</span></p>
   </section>
 
-  <!-- KONTROLKI -->
-  <section class="controls">
-    <button id="saveBtn">Zapisz</button>
-    <button id="loadBtn">Wczytaj</button>
-    <button id="resetBtn" class="danger">Reset</button>
-  </section>
-
-  <section class="messages">
-    <p id="message"></p>
-  </section>
-<section class="shop">
-  <h2>Sklep</h2>
-  <p>Siła kliknięcia: <span id="perClick">1</span></p>
-  <p>Auto klików na sekundę: <span id="autoRate">0</span></p>
-
-  <button id="upgradeClickBtn">Ulepsz klik (+1)</button>
-  <span>Koszt: <span id="upgradeClickCost">10</span></span><br><br>
-
-  <button id="autoClickBtn">Auto klik (+1/s)</button>
-  <span>Koszt: <span id="autoClickCost">25</span></span>
-</section>
-
-<footer class="footer">
-  <p>Made with ♥ dla zabawy. ALPHA 0,3 </p>
-</footer>
-
+  <footer class="footer">
+    <p>Made with ♥ dla zabawy. ALPHA 0.3</p>
+  </footer>
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
+
   const el = {
     points: document.getElementById('points'),
     bigButton: document.getElementById('bigButton'),
+    perClick: document.getElementById('perClick'),
+    autoRate: document.getElementById('autoRate'),
+    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
+    autoClickBtn: document.getElementById('autoClickBtn'),
+    upgradeClickCost: document.getElementById('upgradeClickCost'),
+    autoClickCost: document.getElementById('autoClickCost'),
   };
 
   let points = 0;
+  let perClick = 1;
+  let autoRate = 0;
+
+  let upgradeClickCost = 10;
+  let autoClickCost = 25;
 
   function render() {
-    el.points.textContent = points;
+    el.points.textContent = Math.floor(points);
+    el.perClick.textContent = perClick;
+    el.autoRate.textContent = autoRate;
+    el.upgradeClickCost.textContent = upgradeClickCost;
+    el.autoClickCost.textContent = autoClickCost;
   }
 
   function handleClick() {
-    points++;
+    points += perClick;
     render();
   }
 
+  function buyClickUpgrade() {
+    if (points < upgradeClickCost) return;
+    points -= upgradeClickCost;
+    perClick += 1;
+    upgradeClickCost = Math.ceil(upgradeClickCost * 1.3);
+    render();
+  }
+
+  function buyAutoClick() {
+    if (points < autoClickCost) return;
+    points -= autoClickCost;
+    autoRate += 1;
+    autoClickCost = Math.ceil(autoClickCost * 1.4);
+    render();
+  }
+
+  // AUTO KLIK CO 100ms
+  setInterval(() => {
+    points += autoRate / 10;
+    render();
+  }, 100);
+
   el.bigButton.addEventListener("click", handleClick);
+  el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
+  el.autoClickBtn.addEventListener("click", buyAutoClick);
+
   render();
 });
 </script>
 
 </body>
 </html>
-
-
-
-
