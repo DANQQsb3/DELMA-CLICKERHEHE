@@ -1,189 +1,248 @@
 window.addEventListener('DOMContentLoaded', () => {
-  alert("JS DZIAŁA");
+
+  const SAVE_KEY = "delmaSave";
+
+  // ============================
+  // ZMIENNE GRY
+  // ============================
+
+  let points = 0;
+  let perClick = 1;
+  let autoRate = 0;
+
+  let upgradeClickCost = 10;
+  let autoClickCost = 25;
+  let boosterCost = 200;
+
+  let boosterActive = false;
+  let boosterTime = 0;
+
+  let rebirths = 0;
+  let rebirthMultiplier = 1;
+  let rebirthCost = 5000;
+
+  // ============================
+  // ELEMENTY HTML
+  // ============================
 
   const el = {
     points: document.getElementById('points'),
-    pointsTop: document.getElementById('pointsTop'),
     perClick: document.getElementById('perClick'),
     autoRate: document.getElementById('autoRate'),
-    bigButton: document.getElementById('bigButton'),
-    message: document.getElementById('message'),
-    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
-    autoClickBtn: document.getElementById('autoClickBtn'),
-    boosterBtn: document.getElementById('boosterBtn'),
-    doubleClickBtn: document.getElementById('doubleClickBtn'),
+
     upgradeClickCost: document.getElementById('upgradeClickCost'),
     autoClickCost: document.getElementById('autoClickCost'),
     boosterCost: document.getElementById('boosterCost'),
-    doubleClickCost: document.getElementById('doubleClickCost'),
-    saveBtn: document.getElementById('saveBtn'),
-    loadBtn: document.getElementById('loadBtn'),
-    resetBtn: document.getElementById('resetBtn'),
+
     rebirths: document.getElementById('rebirths'),
     rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    nextRebirthCost: document.getElementById('nextRebirthCost'),
-    rebirthBtn: document.getElementById('rebirthBtn'),
-  };
+    rebirthCost: document.getElementById('rebirthCost'),
 
-window.addEventListener('DOMContentLoaded', () => {
-  const el = {
-    points: document.getElementById('points'),
-    pointsTop: document.getElementById('pointsTop'),
-    perClick: document.getElementById('perClick'),
-    autoRate: document.getElementById('autoRate'),
     bigButton: document.getElementById('bigButton'),
-    message: document.getElementById('message'),
     upgradeClickBtn: document.getElementById('upgradeClickBtn'),
     autoClickBtn: document.getElementById('autoClickBtn'),
     boosterBtn: document.getElementById('boosterBtn'),
-    doubleClickBtn: document.getElementById('doubleClickBtn'),
-    upgradeClickCost: document.getElementById('upgradeClickCost'),
-    autoClickCost: document.getElementById('autoClickCost'),
-    boosterCost: document.getElementById('boosterCost'),
-    doubleClickCost: document.getElementById('doubleClickCost'),
+    rebirthBtn: document.getElementById('rebirthBtn'),
+
     saveBtn: document.getElementById('saveBtn'),
     loadBtn: document.getElementById('loadBtn'),
-    resetBtn: document.getElementById('resetBtn'),
-    rebirths: document.getElementById('rebirths'),
-    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    nextRebirthCost: document.getElementById('nextRebirthCost'),
-    rebirthBtn: document.getElementById('rebirthBtn'),
+    softResetBtn: document.getElementById('softResetBtn'),
   };
 
-  const SAVE_KEY = "delma-clicker-v3";
-
-  const state = {
-    points: 0,
-    perClick: 1,
-    autoRate: 0,
-    costs: {
-      upgradeClick: 10,
-      autoClick: 25,
-      booster: 100,
-      doubleClick: 500,
-    },
-    booster: {
-      active: false,
-      multiplier: 2,
-      endsAt: 0,
-    },
-    rebirths: 0,
-    rebirthMultiplier: 1,
-    nextRebirthCost: 5000,
-  };
-
-  function popMessage(text) {
-    el.message.textContent = text;
-    setTimeout(() => el.message.textContent = "", 2000);
-  }
+  // ============================
+  // RENDEROWANIE
+  // ============================
 
   function render() {
-    const clickMult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
-    el.points.textContent = Math.floor(state.points);
-    el.pointsTop.textContent = Math.floor(state.points);
-    el.perClick.textContent = state.perClick * clickMult;
-    el.autoRate.textContent = state.autoRate * state.rebirthMultiplier;
-    el.upgradeClickCost.textContent = state.costs.upgradeClick;
-    el.autoClickCost.textContent = state.costs.autoClick;
-    el.boosterCost.textContent = state.costs.booster;
-    el.doubleClickCost.textContent = state.costs.doubleClick;
-    el.rebirths.textContent = state.rebirths;
-    el.rebirthMultiplier.textContent = state.rebirthMultiplier + "x";
-    el.nextRebirthCost.textContent = state.nextRebirthCost;
-    el.rebirthBtn.disabled = state.points < state.nextRebirthCost;
+    el.points.textContent = Math.floor(points);
+    el.perClick.textContent = perClick;
+    el.autoRate.textContent = autoRate;
+
+    el.upgradeClickCost.textContent = upgradeClickCost;
+    el.autoClickCost.textContent = autoClickCost;
+    el.boosterCost.textContent = boosterCost;
+
+    el.rebirths.textContent = rebirths;
+    el.rebirthMultiplier.textContent = rebirthMultiplier;
+    el.rebirthCost.textContent = rebirthCost;
   }
 
+  // ============================
+  // KLIKANIE
+  // ============================
+
   function handleClick() {
-    const mult = (state.booster.active ? state.booster.multiplier : 1) * state.rebirthMultiplier;
-    state.points += state.perClick * mult;
+    let gain = perClick * rebirthMultiplier;
+
+    if (boosterActive) {
+      gain *= 2;
+    }
+
+    points += gain;
     render();
   }
 
+  // ============================
+  // ULEPSZENIA
+  // ============================
+
   function buyClickUpgrade() {
-    if (state.points < state.costs.upgradeClick) return popMessage("Za mało punktów!");
-    state.points -= state.costs.upgradeClick;
-    state.perClick++;
-    state.costs.upgradeClick = Math.ceil(state.costs.upgradeClick * 1.25);
+    if (points < upgradeClickCost) return;
+
+    points -= upgradeClickCost;
+    perClick += 1;
+
+    upgradeClickCost = Math.ceil(upgradeClickCost * 1.4);
+
     render();
   }
 
   function buyAutoClick() {
-    if (state.points < state.costs.autoClick) return popMessage("Za mało punktów!");
-    state.points -= state.costs.autoClick;
-    state.autoRate++;
-    state.costs.autoClick = Math.ceil(state.costs.autoClick * 1.35);
+    if (points < autoClickCost) return;
+
+    points -= autoClickCost;
+    autoRate += 1;
+
+    autoClickCost = Math.ceil(autoClickCost * 1.5);
+
     render();
   }
 
   function buyBooster() {
-    if (state.points < state.costs.booster) return popMessage("Za mało punktów!");
-    state.points -= state.costs.booster;
-    state.booster.active = true;
-    state.booster.endsAt = Date.now() + 30000;
-    state.costs.booster = Math.ceil(state.costs.booster * 1.5);
-    popMessage("Booster aktywny! Klik x2 przez 30s!");
+    if (points < boosterCost) return;
+
+    points -= boosterCost;
+    boosterActive = true;
+    boosterTime = 100; // 10 sekund
+
+    boosterCost = Math.ceil(boosterCost * 1.8);
+
     render();
   }
 
-  function buyDoubleClick() {
-    if (state.points < state.costs.doubleClick) return popMessage("Za mało punktów!");
-    state.points -= state.costs.doubleClick;
-    state.perClick *= 2;
-    state.costs.doubleClick = Math.ceil(state.costs.doubleClick * 2);
-    popMessage("Double Click kupiony!");
-    render();
-  }
+  // ============================
+  // REBIRTH
+  // ============================
 
   function doRebirth() {
-    if (state.points < state.nextRebirthCost) return popMessage("Za mało punktów!");
-    state.rebirths++;
-    state.rebirthMultiplier *= 2;
-    state.points = 0;
-    state.nextRebirthCost = Math.ceil(state.nextRebirthCost * 2);
-    popMessage("REBIRTH! Mnożnik x" + state.rebirthMultiplier);
+    if (points < rebirthCost) return;
+
+    points = 0;
+    perClick = 1;
+    autoRate = 0;
+
+    upgradeClickCost = 10;
+    autoClickCost = 25;
+    boosterCost = 200;
+
+    rebirths += 1;
+    rebirthMultiplier = 1 + rebirths;
+    rebirthCost = Math.ceil(rebirthCost * 2.5);
+
     render();
   }
 
+  // ============================
+  // ZAPIS GRY
+  // ============================
+
   function saveGame() {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
-    popMessage("Zapisano grę!");
+    const data = {
+      points,
+      perClick,
+      autoRate,
+      upgradeClickCost,
+      autoClickCost,
+      boosterCost,
+      boosterActive,
+      boosterTime,
+      rebirths,
+      rebirthMultiplier,
+      rebirthCost
+    };
+
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   }
 
   function loadGame() {
     const data = localStorage.getItem(SAVE_KEY);
-    if (!data) return popMessage("Brak zapisu!");
+    if (!data) return;
+
     const loaded = JSON.parse(data);
-    Object.assign(state, loaded);
-    popMessage("Wczytano grę!");
+
+    points = loaded.points;
+    perClick = loaded.perClick;
+    autoRate = loaded.autoRate;
+    upgradeClickCost = loaded.upgradeClickCost;
+    autoClickCost = loaded.autoClickCost;
+    boosterCost = loaded.boosterCost;
+    boosterActive = loaded.boosterActive;
+    boosterTime = loaded.boosterTime;
+    rebirths = loaded.rebirths;
+    rebirthMultiplier = loaded.rebirthMultiplier;
+    rebirthCost = loaded.rebirthCost;
+
     render();
   }
 
-  function resetGame() {
-    if (!confirm("Na pewno reset?")) return;
-    localStorage.removeItem(SAVE_KEY);
-    location.reload();
+  // ============================
+  // MIĘKKI RESET (bez kasowania zapisu)
+  // ============================
+
+  function softResetGame() {
+    points = 0;
+    perClick = 1;
+    autoRate = 0;
+
+    upgradeClickCost = 10;
+    autoClickCost = 25;
+    boosterCost = 200;
+
+    boosterActive = false;
+    boosterTime = 0;
+
+    render();
   }
 
-  function gameLoop() {
-    const now = Date.now();
-    if (state.booster.active && now >= state.booster.endsAt) {
-      state.booster.active = false;
-      popMessage("Booster wygasł!");
+  // ============================
+  // PĘTLA GRY
+  // ============================
+
+  setInterval(() => {
+    points += (autoRate * rebirthMultiplier) / 10;
+
+    if (boosterActive) {
+      points += (autoRate * rebirthMultiplier) / 10;
     }
-    state.points += state.autoRate * state.rebirthMultiplier / 10;
+
+    if (boosterActive) {
+      boosterTime--;
+      if (boosterTime <= 0) boosterActive = false;
+    }
+
     render();
-  }
+    saveGame(); // auto‑zapis
+  }, 100);
+
+  // ============================
+  // EVENTY
+  // ============================
 
   el.bigButton.addEventListener("click", handleClick);
   el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
   el.autoClickBtn.addEventListener("click", buyAutoClick);
   el.boosterBtn.addEventListener("click", buyBooster);
-  el.doubleClickBtn.addEventListener("click", buyDoubleClick);
   el.rebirthBtn.addEventListener("click", doRebirth);
+
   el.saveBtn.addEventListener("click", saveGame);
   el.loadBtn.addEventListener("click", loadGame);
-  el.resetBtn.addEventListener("click", resetGame);
+  el.softResetBtn.addEventListener("click", softResetGame);
 
-  setInterval(gameLoop, 100);
+  // ============================
+  // AUTO-WCZYTANIE PRZY STARCIU
+  // ============================
+
+  loadGame();
   render();
+
 });
