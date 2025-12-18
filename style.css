@@ -3,149 +3,316 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #222, #050505);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(circle at top, #242424, #050505);
   color: #f5f5f5;
   margin: 0;
 }
 
+/* GŁÓWNY KONTENER */
 .game-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* GÓRA */
+/* GÓRNY PASEK */
 .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 16px;
   background: #111;
   border-bottom: 1px solid #333;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
-.top-bar h1 {
+.top-left h1 {
   margin: 0;
   font-size: 24px;
 }
 
-.stats-main {
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.top-right {
   display: flex;
-  justify-content: space-between;
-  font-size: 14px;
+  gap: 10px;
+}
+
+.stat-box {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-align: center;
+  min-width: 80px;
+  border: 1px solid #333;
+}
+
+.stat-box span {
+  font-size: 11px;
+  color: #bbb;
+}
+
+.stat-box strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 16px;
 }
 
 /* UKŁAD GŁÓWNY */
 .layout {
   flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(260px, 1.1fr) minmax(260px, 1fr) minmax(260px, 1.1fr);
   gap: 10px;
+  padding: 10px;
 }
 
 /* PANEELE */
 .panel {
-  background: rgba(20, 20, 20, 0.95);
+  background: #181818;
   border-radius: 12px;
   padding: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.7);
 }
 
+/* PANEL KLIKANIA */
 .main-click {
-  flex: 1 1 260px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
-.side-panel {
-  flex: 1 1 260px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.info-line {
+  font-size: 14px;
+  color: #ccc;
 }
 
-.sub-panel {
-  background: #151515;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-/* KLIK PRZYCISK */
 .big-button {
-  margin: 10px 0;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  color: #000;
-  font-size: 28px;
-  padding: 22px 40px;
-  border: none;
+  margin: 12px 0;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
+  border: none;
   cursor: pointer;
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: 0 0 8px #000;
+  color: #000;
+  background: radial-gradient(circle at 30% 30%, #fffbd5, #f7d87c, #f0b000);
+  box-shadow: 0 0 30px rgba(255, 230, 120, 0.9);
   transition: transform 0.08s, box-shadow 0.08s;
 }
 
 .big-button:active {
   transform: scale(0.94);
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 12px rgba(255, 230, 120, 0.7);
+}
+
+.click-power {
+  margin-top: 6px;
+  font-size: 15px;
+}
+
+.quick-stats p {
+  margin: 2px 0;
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* PANELY BOCZNE */
+.side-panel,
+.extra-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sub-panel {
+  background: #141414;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #333;
 }
 
 /* SKLEP */
 .shop-item {
+  background: #1b1b1b;
+  border-radius: 8px;
+  padding: 8px;
   margin-bottom: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #333;
+  border: 1px solid #333;
+}
+
+.shop-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.shop-info strong {
   font-size: 14px;
+}
+
+.shop-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+/* MISJE */
+.mission {
+  background: #1b1b1b;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #333;
+  font-size: 13px;
+}
+
+.mission-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.mission-header span {
+  font-size: 12px;
+  color: #ccc;
 }
 
 /* PRZYCISKI */
 button {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
+  padding: 6px 10px;
   border: none;
   border-radius: 8px;
   background: #00ff88;
   color: #000;
   font-size: 14px;
   cursor: pointer;
+  transition: background 0.1s, transform 0.06s;
 }
 
 button:hover {
   background: #00dd70;
 }
 
-/* DÓŁ */
-.bottom-bar {
-  padding: 10px 16px;
-  background: #111;
-  border-top: 1px solid #333;
+button:active {
+  transform: scale(0.97);
+}
+
+button.danger {
+  background: #ff4466;
+  color: #fff;
+}
+
+button.danger:hover {
+  background: #dd2244;
+}
+
+/* USTAWIENIA */
+.toggle-line {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
   font-size: 13px;
+  margin: 3px 0;
+}
+
+.save-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* DÓŁ */
+.bottom-bar {
+  padding: 8px 16px;
+  background: #111;
+  border-top: 1px solid #333;
+  font-size: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .bottom-bar audio {
-  width: 100%;
+  max-width: 240px;
 }
 
-/* TELEFONY */
-@media (max-width: 700px) {
+/* EFEKT +1 */
+.float-text {
+  position: absolute;
+  pointer-events: none;
+  color: #fff;
+  font-size: 18px;
+  text-shadow: 0 0 8px #00ff88;
+  animation: floatUp 0.6s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+/* RESPONSYWNOŚĆ */
+@media (max-width: 900px) {
   .layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
-  .main-click, .side-panel {
-    flex: 1 1 auto;
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .top-right {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .big-button {
+    width: 180px;
+    height: 180px;
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 500px) {
+  .top-bar {
+    padding: 8px;
+  }
+
+  .layout {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .panel {
+    padding: 8px;
+  }
+
+  .bottom-bar {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .big-button {
+    width: 160px;
+    height: 160px;
     font-size: 24px;
-    width: 190px;
-    height: 190px;
   }
 }
