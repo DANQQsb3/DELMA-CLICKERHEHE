@@ -2,57 +2,300 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Delma Clicker</title>
+  <title>Delma Clicker – New GUI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 
-  <div id="top-area">
-    <h1>Delma Clicker</h1>
-    <h2>Punkty: <span id="points">0</span></h2>
-    <button id="bigButton">Klikaj mnie!</button>
+  <div class="game-wrapper">
+
+    <header class="top-bar">
+      <h1>Delma Clicker</h1>
+      <div class="stats-main">
+        <div>Punkty: <span id="points">0</span></div>
+        <div>Mnożnik: <span id="rebirthMultiplier">1</span>x</div>
+      </div>
+    </header>
+
+    <main class="layout">
+
+      <!-- LEWA: KLIK -->
+      <section class="panel main-click">
+        <h2>Klikaj</h2>
+        <button id="bigButton" class="big-button">DELGMA</button>
+        <p>Siła kliknięcia: <span id="perClick">1</span></p>
+      </section>
+
+      <!-- PRAWA: SKLEP + REBIRTH + ZAPIS -->
+      <section class="panel side-panel">
+
+        <div class="sub-panel">
+          <h2>Sklep</h2>
+
+          <div class="shop-item">
+            <div>Ulepsz klik (+1)</div>
+            <div>Koszt: <span id="upgradeClickCost">10</span></div>
+            <button id="upgradeClickBtn">Kup</button>
+          </div>
+
+          <div class="shop-item">
+            <div>Auto klik (+1/s)</div>
+            <div>Koszt: <span id="autoClickCost">25</span></div>
+            <button id="autoClickBtn">Kup</button>
+          </div>
+
+          <div class="shop-item">
+            <div>Booster x2 (10s)</div>
+            <div>Koszt: <span id="boosterCost">200</span></div>
+            <button id="boosterBtn">Kup</button>
+          </div>
+
+          <p>Auto klików: <span id="autoRate">0</span>/s</p>
+        </div>
+
+        <div class="sub-panel">
+          <h2>Rebirth</h2>
+          <p>Rebirthy: <span id="rebirths">0</span></p>
+          <p>Koszt rebirth: <span id="rebirthCost">5000</span></p>
+          <button id="rebirthBtn">Zrób rebirth</button>
+        </div>
+
+        <div class="sub-panel">
+          <h2>Zapis gry</h2>
+          <button id="saveBtn">Zapisz</button>
+          <button id="loadBtn">Wczytaj</button>
+          <button id="softResetBtn">Reset (bez kasowania zapisu)</button>
+        </div>
+
+      </section>
+    </main>
+
+    <footer class="bottom-bar">
+      <div>Muzyka: Przemek Pro (dodaj swoje pliki)</div>
+      <audio id="bgMusic" controls loop>
+        <!-- PODSTAW SWÓJ PLIK Z MUZYKĄ PRZEMEK PRO, np. bg.mp3 -->
+        <source src="przemek-pro-bg.mp3" type="audio/mpeg">
+        Twoja przeglądarka nie obsługuje audio.
+      </audio>
+    </footer>
+
   </div>
 
-  <section id="shop-area">
-    <h2>Sklep</h2>
+  <script>
+    // ============================
+    // ZMIENNE GRY
+    // ============================
+    const SAVE_KEY = "delmaClickerSave";
 
-    <p>Siła kliknięcia: <span id="perClick">1</span></p>
-    <button id="upgradeClickBtn">Ulepsz klik (+1)</button>
-    <p>Koszt: <span id="upgradeClickCost">10</span></p>
+    let points = 0;
+    let perClick = 1;
+    let autoRate = 0;
 
-    <hr>
+    let upgradeClickCost = 10;
+    let autoClickCost = 25;
+    let boosterCost = 200;
 
-    <p>Auto klików na sekundę: <span id="autoRate">0</span></p>
-    <button id="autoClickBtn">Kup auto klik (+1/s)</button>
-    <p>Koszt: <span id="autoClickCost">25</span></p>
+    let boosterActive = false;
+    let boosterTime = 0;
 
-    <hr>
+    let rebirths = 0;
+    let rebirthMultiplier = 1;
+    let rebirthCost = 5000;
 
-    <p>Booster x2 na 10 sekund</p>
-    <button id="boosterBtn">Kup booster</button>
-    <p>Koszt: <span id="boosterCost">200</span></p>
-  </section>
+    // ============================
+    // ELEMENTY HTML
+    // ============================
+    const el = {
+      points: document.getElementById('points'),
+      perClick: document.getElementById('perClick'),
+      autoRate: document.getElementById('autoRate'),
 
-  <section id="rebirth-area">
-    <h2>Rebirth</h2>
-    <p>Rebirthy: <span id="rebirths">0</span></p>
-    <p>Mnożnik punktów: <span id="rebirthMultiplier">1</span>x</p>
-    <p>Koszt rebirth: <span id="rebirthCost">5000</span></p>
-    <button id="rebirthBtn">Zrób rebirth</button>
-  </section>
+      upgradeClickCost: document.getElementById('upgradeClickCost'),
+      autoClickCost: document.getElementById('autoClickCost'),
+      boosterCost: document.getElementById('boosterCost'),
 
-  <section id="save-area">
-    <h2>Zapis gry</h2>
-    <button id="saveBtn">Zapisz</button>
-    <button id="loadBtn">Wczytaj</button>
-    <button id="softResetBtn">Reset (bez kasowania zapisu)</button>
-  </section>
+      rebirths: document.getElementById('rebirths'),
+      rebirthMultiplier: document.getElementById('rebirthMultiplier'),
+      rebirthCost: document.getElementById('rebirthCost'),
 
-  <footer class="footer">
-    <p>Made with ♥ Delma Clicker</p>
-  </footer>
+      bigButton: document.getElementById('bigButton'),
+      upgradeClickBtn: document.getElementById('upgradeClickBtn'),
+      autoClickBtn: document.getElementById('autoClickBtn'),
+      boosterBtn: document.getElementById('boosterBtn'),
+      rebirthBtn: document.getElementById('rebirthBtn'),
 
-  <!-- BARDZO WAŻNE: skrypt NA KOŃCU body -->
-  <script src="script.js?v=1"></script>
+      saveBtn: document.getElementById('saveBtn'),
+      loadBtn: document.getElementById('loadBtn'),
+      softResetBtn: document.getElementById('softResetBtn'),
+    };
+
+    // ============================
+    // RENDER
+    // ============================
+    function render() {
+      el.points.textContent = Math.floor(points);
+      el.perClick.textContent = perClick;
+      el.autoRate.textContent = autoRate;
+
+      el.upgradeClickCost.textContent = upgradeClickCost;
+      el.autoClickCost.textContent = autoClickCost;
+      el.boosterCost.textContent = boosterCost;
+
+      el.rebirths.textContent = rebirths;
+      el.rebirthMultiplier.textContent = rebirthMultiplier;
+      el.rebirthCost.textContent = rebirthCost;
+    }
+
+    // ============================
+    // KLIKANIE
+    // ============================
+    function handleClick() {
+      let gain = perClick * rebirthMultiplier;
+      if (boosterActive) gain *= 2;
+      points += gain;
+      render();
+    }
+
+    // ============================
+    // SKLEP
+    // ============================
+    function buyClickUpgrade() {
+      if (points < upgradeClickCost) return;
+      points -= upgradeClickCost;
+      perClick += 1;
+      upgradeClickCost = Math.ceil(upgradeClickCost * 1.4);
+      render();
+    }
+
+    function buyAutoClick() {
+      if (points < autoClickCost) return;
+      points -= autoClickCost;
+      autoRate += 1;
+      autoClickCost = Math.ceil(autoClickCost * 1.5);
+      render();
+    }
+
+    function buyBooster() {
+      if (points < boosterCost) return;
+      points -= boosterCost;
+      boosterActive = true;
+      boosterTime = 100; // 10 x 0.1s
+      boosterCost = Math.ceil(boosterCost * 1.8);
+      render();
+    }
+
+    // ============================
+    // REBIRTH
+    // ============================
+    function doRebirth() {
+      if (points < rebirthCost) return;
+
+      points = 0;
+      perClick = 1;
+      autoRate = 0;
+
+      upgradeClickCost = 10;
+      autoClickCost = 25;
+      boosterCost = 200;
+
+      rebirths += 1;
+      rebirthMultiplier = 1 + rebirths;
+      rebirthCost = Math.ceil(rebirthCost * 2.5);
+
+      render();
+    }
+
+    // ============================
+    // ZAPIS
+    // ============================
+    function saveGame() {
+      const data = {
+        points,
+        perClick,
+        autoRate,
+        upgradeClickCost,
+        autoClickCost,
+        boosterCost,
+        boosterActive,
+        boosterTime,
+        rebirths,
+        rebirthMultiplier,
+        rebirthCost
+      };
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    }
+
+    function loadGame() {
+      const data = localStorage.getItem(SAVE_KEY);
+      if (!data) return;
+      const loaded = JSON.parse(data);
+
+      points = loaded.points;
+      perClick = loaded.perClick;
+      autoRate = loaded.autoRate;
+      upgradeClickCost = loaded.upgradeClickCost;
+      autoClickCost = loaded.autoClickCost;
+      boosterCost = loaded.boosterCost;
+      boosterActive = loaded.boosterActive;
+      boosterTime = loaded.boosterTime;
+      rebirths = loaded.rebirths;
+      rebirthMultiplier = loaded.rebirthMultiplier;
+      rebirthCost = loaded.rebirthCost;
+
+      render();
+    }
+
+    function softResetGame() {
+      points = 0;
+      perClick = 1;
+      autoRate = 0;
+
+      upgradeClickCost = 10;
+      autoClickCost = 25;
+      boosterCost = 200;
+
+      boosterActive = false;
+      boosterTime = 0;
+
+      render();
+    }
+
+    // ============================
+    // PĘTLA GRY
+    // ============================
+    setInterval(() => {
+      points += (autoRate * rebirthMultiplier) / 10;
+      if (boosterActive) {
+        points += (autoRate * rebirthMultiplier) / 10;
+      }
+
+      if (boosterActive) {
+        boosterTime--;
+        if (boosterTime <= 0) boosterActive = false;
+      }
+
+      render();
+      saveGame();
+    }, 100);
+
+    // ============================
+    // EVENTY
+    // ============================
+    el.bigButton.addEventListener("click", handleClick);
+    el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
+    el.autoClickBtn.addEventListener("click", buyAutoClick);
+    el.boosterBtn.addEventListener("click", buyBooster);
+    el.rebirthBtn.addEventListener("click", doRebirth);
+
+    el.saveBtn.addEventListener("click", saveGame);
+    el.loadBtn.addEventListener("click", loadGame);
+    el.softResetBtn.addEventListener("click", softResetGame);
+
+    // START
+    loadGame();
+    render();
+  </script>
+
 </body>
 </html>
