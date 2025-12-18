@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Delma Clicker</title>
+  <title>Delma Clicker – Ultimate Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css?v=1">
 </head>
@@ -10,74 +10,175 @@
 
   <div class="game-wrapper">
 
+    <!-- GÓRNY PASEK -->
     <header class="top-bar">
-      <h1>Delma Clicker</h1>
-      <div class="stats-main">
-        <div>Punkty: <span id="points">0</span></div>
-        <div>Mnożnik: <span id="rebirthMultiplier">1</span>x</div>
+      <div class="top-left">
+        <h1>Delma Clicker</h1>
+        <p class="subtitle">Najlepsza wersja Delmy do klikania</p>
+      </div>
+      <div class="top-right">
+        <div class="stat-box">
+          <span>Punkty</span>
+          <strong id="points">0</strong>
+        </div>
+        <div class="stat-box">
+          <span>Mnożnik</span>
+          <strong><span id="rebirthMultiplier">1</span>x</strong>
+        </div>
+        <div class="stat-box">
+          <span>Rebirthy</span>
+          <strong id="rebirths">0</strong>
+        </div>
       </div>
     </header>
 
+    <!-- GŁÓWNY UKŁAD -->
     <main class="layout">
 
-      <!-- LEWA: KLIK -->
+      <!-- PANEL KLIKANIA -->
       <section class="panel main-click">
-        <h2>Klikaj w Delmę</h2>
-        <button id="bigButton" class="image-button">
-          <img src="delma.png" alt="Kliknij Delmę" class="click-image">
+        <h2>Klikaj w DELMĘ</h2>
+        <p class="info-line">Imię do klikania: <strong>Delma</strong></p>
+
+        <!-- PRZYCISK DELMA -->
+        <button id="bigButton" class="big-button">
+          DELMA
         </button>
-        <p>Siła kliknięcia: <span id="perClick">1</span></p>
+
+        <p class="click-power">
+          Siła kliknięcia: <span id="perClick">1</span>
+        </p>
+
+        <div class="quick-stats">
+          <p>Auto klików: <span id="autoRate">0</span>/s</p>
+          <p>Łączne kliknięcia: <span id="totalClicks">0</span></p>
+          <p>Czas gry: <span id="playTime">0</span> s</p>
+        </div>
       </section>
 
-      <!-- PRAWA: SKLEP + REBIRTH + ZAPIS -->
+      <!-- PANEL SKLEPU I REBIRTHÓW -->
       <section class="panel side-panel">
 
+        <!-- SKLEP -->
         <div class="sub-panel">
           <h2>Sklep</h2>
 
           <div class="shop-item">
-            <div>Ulepsz klik (+1)</div>
-            <div>Koszt: <span id="upgradeClickCost">10</span></div>
-            <button id="upgradeClickBtn">Kup</button>
+            <div class="shop-info">
+              <strong>Ulepsz klik (+1)</strong>
+              <span>Siła kliknięcia: <span id="perClickShop">1</span></span>
+            </div>
+            <div class="shop-bottom">
+              <span>Koszt: <span id="upgradeClickCost">10</span></span>
+              <button id="upgradeClickBtn">Kup</button>
+            </div>
           </div>
 
           <div class="shop-item">
-            <div>Auto klik (+1/s)</div>
-            <div>Koszt: <span id="autoClickCost">25</span></div>
-            <button id="autoClickBtn">Kup</button>
+            <div class="shop-info">
+              <strong>Auto klik (+1/s)</strong>
+              <span>Obecnie: <span id="autoRateShop">0</span>/s</span>
+            </div>
+            <div class="shop-bottom">
+              <span>Koszt: <span id="autoClickCost">25</span></span>
+              <button id="autoClickBtn">Kup</button>
+            </div>
           </div>
 
           <div class="shop-item">
-            <div>Booster x2 (10s)</div>
-            <div>Koszt: <span id="boosterCost">200</span></div>
-            <button id="boosterBtn">Kup</button>
+            <div class="shop-info">
+              <strong>Booster x2 (15s)</strong>
+              <span>Aktywny: <span id="boosterStatus">nie</span></span>
+            </div>
+            <div class="shop-bottom">
+              <span>Koszt: <span id="boosterCost">200</span></span>
+              <button id="boosterBtn">Kup</button>
+            </div>
           </div>
-
-          <p>Auto klików: <span id="autoRate">0</span>/s</p>
         </div>
 
+        <!-- REBIRTH -->
         <div class="sub-panel">
           <h2>Rebirth</h2>
-          <p>Rebirthy: <span id="rebirths">0</span></p>
-          <p>Koszt rebirth: <span id="rebirthCost">5000</span></p>
+          <p>Rebirthy: <span id="rebirths2">0</span></p>
+          <p>Mnożnik: <span id="rebirthMultiplier2">1</span>x</p>
+          <p>Koszt rebirth: <span id="rebirthCost">5000</span> pkt</p>
           <button id="rebirthBtn">Zrób rebirth</button>
-        </div>
-
-        <div class="sub-panel">
-          <h2>Zapis gry</h2>
-          <button id="saveBtn">Zapisz</button>
-          <button id="loadBtn">Wczytaj</button>
-          <button id="softResetBtn">Reset (bez kasowania zapisu)</button>
+          <p class="hint">Rebirth resetuje punkty i ulepszenia, ale zwiększa mnożnik na zawsze.</p>
         </div>
 
       </section>
+
+      <!-- PANEL MISJI I STATYSTYK -->
+      <section class="panel extra-panel">
+
+        <!-- MISJE -->
+        <div class="sub-panel">
+          <h2>Misje</h2>
+
+          <div class="mission" id="mission1">
+            <div class="mission-header">
+              <strong>Misja 1: 1 000 punktów</strong>
+              <span>Status: <span id="mission1Status">Nieukończona</span></span>
+            </div>
+            <p>Nagroda: Booster x2 na 15 sekund.</p>
+          </div>
+
+          <div class="mission" id="mission2">
+            <div class="mission-header">
+              <strong>Misja 2: 100 kliknięć</strong>
+              <span>Status: <span id="mission2Status">Nieukończona</span></span>
+            </div>
+            <p>Nagroda: +5 do siły kliknięcia.</p>
+          </div>
+
+          <div class="mission" id="mission3">
+            <div class="mission-header">
+              <strong>Misja 3: 1 rebirth</strong>
+              <span>Status: <span id="mission3Status">Nieukończona</span></span>
+            </div>
+            <p>Nagroda: +10% do całkowitego mnożnika.</p>
+          </div>
+        </div>
+
+        <!-- STATYSTYKI I USTAWIENIA -->
+        <div class="sub-panel">
+          <h2>Statystyki</h2>
+          <p>Łączne kliknięcia: <span id="totalClicks2">0</span></p>
+          <p>Max punktów (rekord): <span id="maxPoints">0</span></p>
+          <p>Wykonane misje: <span id="completedMissions">0</span>/3</p>
+
+          <h3>Ustawienia</h3>
+          <label class="toggle-line">
+            <input type="checkbox" id="soundToggle" checked>
+            <span>Dźwięk włączony</span>
+          </label>
+          <label class="toggle-line">
+            <input type="checkbox" id="animToggle" checked>
+            <span>Animacje włączone</span>
+          </label>
+
+          <div class="save-buttons">
+            <button id="saveBtn">Zapisz</button>
+            <button id="loadBtn">Wczytaj</button>
+            <button id="softResetBtn">Miękki reset</button>
+            <button id="hardResetBtn" class="danger">Twardy reset (kasuje zapis)</button>
+          </div>
+        </div>
+
+      </section>
+
     </main>
 
+    <!-- DÓŁ -->
     <footer class="bottom-bar">
-      <div>Muzyka: Przemek Pro</div>
-      <audio id="bgMusic" controls loop>
-        <source src="przemek-pro-bg.mp3" type="audio/mpeg">
+      <div>Delma Clicker – Ultimate Edition | Muzyka: Twoje pliki (np. Przemek Pro)</div>
+      <audio id="bgMusic" loop>
+        <!-- Podstaw swój plik, np. przemek-pro.mp3 -->
+        <source src="music.mp3" type="audio/mpeg">
+        Twoja przeglądarka nie obsługuje audio.
       </audio>
+      <button id="musicToggleBtn">Włącz / wyłącz muzykę</button>
     </footer>
 
   </div>
