@@ -1,197 +1,151 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const SAVE_KEY = "delmaSave";
+* {
+  box-sizing: border-box;
+}
 
-  // ZMIENNE GRY
-  let points = 0;
-  let perClick = 1;
-  let autoRate = 0;
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #222, #050505);
+  color: #f5f5f5;
+  margin: 0;
+}
 
-  let upgradeClickCost = 10;
-  let autoClickCost = 25;
-  let boosterCost = 200;
+.game-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-  let boosterActive = false;
-  let boosterTime = 0;
+/* GÓRA */
+.top-bar {
+  padding: 10px 16px;
+  background: #111;
+  border-bottom: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  let rebirths = 0;
-  let rebirthMultiplier = 1;
-  let rebirthCost = 5000;
+.top-bar h1 {
+  margin: 0;
+  font-size: 24px;
+}
 
-  // ELEMENTY HTML
-  const el = {
-    points: document.getElementById('points'),
-    perClick: document.getElementById('perClick'),
-    autoRate: document.getElementById('autoRate'),
+.stats-main {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
 
-    upgradeClickCost: document.getElementById('upgradeClickCost'),
-    autoClickCost: document.getElementById('autoClickCost'),
-    boosterCost: document.getElementById('boosterCost'),
+/* UKŁAD GŁÓWNY */
+.layout {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 10px;
+}
 
-    rebirths: document.getElementById('rebirths'),
-    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    rebirthCost: document.getElementById('rebirthCost'),
+/* PANEELE */
+.panel {
+  background: rgba(20, 20, 20, 0.95);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
 
-    bigButton: document.getElementById('bigButton'),
-    upgradeClickBtn: document.getElementById('upgradeClickBtn'),
-    autoClickBtn: document.getElementById('autoClickBtn'),
-    boosterBtn: document.getElementById('boosterBtn'),
-    rebirthBtn: document.getElementById('rebirthBtn'),
+.main-click {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-    saveBtn: document.getElementById('saveBtn'),
-    loadBtn: document.getElementById('loadBtn'),
-    softResetBtn: document.getElementById('softResetBtn'),
-  };
+.side-panel {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  // RENDER
-  function render() {
-    el.points.textContent = Math.floor(points);
-    el.perClick.textContent = perClick;
-    el.autoRate.textContent = autoRate;
+.sub-panel {
+  background: #151515;
+  border-radius: 10px;
+  padding: 10px;
+}
 
-    el.upgradeClickCost.textContent = upgradeClickCost;
-    el.autoClickCost.textContent = autoClickCost;
-    el.boosterCost.textContent = boosterCost;
+/* KLIK PRZYCISK */
+.big-button {
+  margin: 10px 0;
+  background: linear-gradient(135deg, #00ff88, #00d4ff);
+  color: #000;
+  font-size: 28px;
+  padding: 22px 40px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
 
-    el.rebirths.textContent = rebirths;
-    el.rebirthMultiplier.textContent = rebirthMultiplier;
-    el.rebirthCost.textContent = rebirthCost;
+.big-button:active {
+  transform: scale(0.94);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+/* SKLEP */
+.shop-item {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+/* PRZYCISKI */
+button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 8px;
+  background: #00ff88;
+  color: #000;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00dd70;
+}
+
+/* DÓŁ */
+.bottom-bar {
+  padding: 10px 16px;
+  background: #111;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.bottom-bar audio {
+  width: 100%;
+}
+
+/* TELEFONY */
+@media (max-width: 700px) {
+  .layout {
+    flex-direction: column;
   }
 
-  // KLIKANIE
-  function handleClick() {
-    let gain = perClick * rebirthMultiplier;
-    if (boosterActive) gain *= 2;
-    points += gain;
-    render();
+  .main-click, .side-panel {
+    flex: 1 1 auto;
   }
 
-  // ULEPSZENIA
-  function buyClickUpgrade() {
-    if (points < upgradeClickCost) return;
-    points -= upgradeClickCost;
-    perClick += 1;
-    upgradeClickCost = Math.ceil(upgradeClickCost * 1.4);
-    render();
+  .big-button {
+    font-size: 24px;
+    width: 190px;
+    height: 190px;
   }
-
-  function buyAutoClick() {
-    if (points < autoClickCost) return;
-    points -= autoClickCost;
-    autoRate += 1;
-    autoClickCost = Math.ceil(autoClickCost * 1.5);
-    render();
-  }
-
-  function buyBooster() {
-    if (points < boosterCost) return;
-    points -= boosterCost;
-    boosterActive = true;
-    boosterTime = 100; // 10 x 0.1s = 10 sekund
-    boosterCost = Math.ceil(boosterCost * 1.8);
-    render();
-  }
-
-  // REBIRTH
-  function doRebirth() {
-    if (points < rebirthCost) return;
-
-    points = 0;
-    perClick = 1;
-    autoRate = 0;
-
-    upgradeClickCost = 10;
-    autoClickCost = 25;
-    boosterCost = 200;
-
-    rebirths += 1;
-    rebirthMultiplier = 1 + rebirths;
-    rebirthCost = Math.ceil(rebirthCost * 2.5);
-
-    render();
-  }
-
-  // ZAPIS
-  function saveGame() {
-    const data = {
-      points,
-      perClick,
-      autoRate,
-      upgradeClickCost,
-      autoClickCost,
-      boosterCost,
-      boosterActive,
-      boosterTime,
-      rebirths,
-      rebirthMultiplier,
-      rebirthCost
-    };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-  }
-
-  function loadGame() {
-    const data = localStorage.getItem(SAVE_KEY);
-    if (!data) return;
-    const loaded = JSON.parse(data);
-
-    points = loaded.points;
-    perClick = loaded.perClick;
-    autoRate = loaded.autoRate;
-    upgradeClickCost = loaded.upgradeClickCost;
-    autoClickCost = loaded.autoClickCost;
-    boosterCost = loaded.boosterCost;
-    boosterActive = loaded.boosterActive;
-    boosterTime = loaded.boosterTime;
-    rebirths = loaded.rebirths;
-    rebirthMultiplier = loaded.rebirthMultiplier;
-    rebirthCost = loaded.rebirthCost;
-
-    render();
-  }
-
-  // SOFT RESET
-  function softResetGame() {
-    points = 0;
-    perClick = 1;
-    autoRate = 0;
-
-    upgradeClickCost = 10;
-    autoClickCost = 25;
-    boosterCost = 200;
-
-    boosterActive = false;
-    boosterTime = 0;
-
-    render();
-  }
-
-  // PĘTLA GRY
-  setInterval(() => {
-    points += (autoRate * rebirthMultiplier) / 10;
-    if (boosterActive) {
-      points += (autoRate * rebirthMultiplier) / 10;
-    }
-
-    if (boosterActive) {
-      boosterTime--;
-      if (boosterTime <= 0) boosterActive = false;
-    }
-
-    render();
-    saveGame();
-  }, 100);
-
-  // EVENTY
-  el.bigButton.addEventListener("click", handleClick);
-  el.upgradeClickBtn.addEventListener("click", buyClickUpgrade);
-  el.autoClickBtn.addEventListener("click", buyAutoClick);
-  el.boosterBtn.addEventListener("click", buyBooster);
-  el.rebirthBtn.addEventListener("click", doRebirth);
-
-  el.saveBtn.addEventListener("click", saveGame);
-  el.loadBtn.addEventListener("click", loadGame);
-  el.softResetBtn.addEventListener("click", softResetGame);
-
-  // START
-  loadGame();
-  render();
-});
+}
