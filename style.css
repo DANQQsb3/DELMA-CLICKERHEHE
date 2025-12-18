@@ -98,3 +98,7 @@ button:hover {
   }
 
   #bigButton {
+    width: 90%;
+    font-size: 28px;
+  }
+}
