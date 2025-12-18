@@ -2,8 +2,8 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Delma Clicker — Save System Edition</title>
-  <link rel="stylesheet" href="style.css?v=20">
+  <title>Delma Clicker</title>
+  <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 
@@ -49,74 +49,10 @@
   </section>
 
   <footer class="footer">
-    <p>Made with ♥ dla zabawy. SAVE EDITION</p>
+    <p>Made with ♥ Delma Clicker</p>
   </footer>
 
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-
-  const SAVE_KEY = "delmaSave";
-
-  // ============================
-  // ZMIENNE GRY
-  // ============================
-
-  let points = 0;
-  let perClick = 1;
-  let autoRate = 0;
-
-  let upgradeClickCost = 10;
-  let autoClickCost = 25;
-  let boosterCost = 200;
-
-  let boosterActive = false;
-  let boosterTime = 0;
-
-  let rebirths = 0;
-  let rebirthMultiplier = 1;
-  let rebirthCost = 5000;
-
-  const el = {
-    points: document.getElementById('points'),
-    perClick: document.getElementById('perClick'),
-    autoRate: document.getElementById('autoRate'),
-    upgradeClickCost: document.getElementById('upgradeClickCost'),
-    autoClickCost: document.getElementById('autoClickCost'),
-    boosterCost: document.getElementById('boosterCost'),
-    rebirths: document.getElementById('rebirths'),
-    rebirthMultiplier: document.getElementById('rebirthMultiplier'),
-    rebirthCost: document.getElementById('rebirthCost'),
-  };
-
-  // ============================
-  // ZAPIS GRY
-  // ============================
-
-  function saveGame() {
-    const data = {
-      points,
-      perClick,
-      autoRate,
-      upgradeClickCost,
-      autoClickCost,
-      boosterCost,
-      boosterActive,
-      boosterTime,
-      rebirths,
-      rebirthMultiplier,
-      rebirthCost
-    };
-
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-    console.log("Gra zapisana!");
-  }
-
-  function loadGame() {
-    const data = localStorage.getItem(SAVE_KEY);
-    if (!data) return console.log("Brak zapisu!");
-
-    const loaded = JSON.parse(data);
-
-    points = loaded.points;
-    perClick = loaded.perClick;
-    autoRate = loaded.auto
+  <!-- BARDZO WAŻNE: skrypt NA KOŃCU body -->
+  <script src="script.js?v=1"></script>
+</body>
+</html>
